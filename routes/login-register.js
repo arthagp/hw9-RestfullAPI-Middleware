@@ -1,11 +1,10 @@
 const express = require("express");
 const route = express.Router();
-const pool = require("../connectDb.js");
+const pool = require("../config.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 //membuat enpoint untuk login
-// route.get()
 
 //ketika menginputkan password user akan di di enkripsi menggunakan bycript
 // menggunakan async await untuk menunggu proses hash pada password, sehingga data tidak bernilai undefined ketika tidak menggunakan async await
@@ -36,9 +35,10 @@ route.post("/register", async (req, res) => {
   });
 });
 
-route.get("/login", (req, res) => {
-    // console.log(req.body); //hanya untuk ngecek saja
-    const { email, password } = req.body;
+
+route.post("/login", (req, res, next) => {
+    // console.log(req.body);
+    const { email, password} = req.body;
     const findQuery = `SELECT * FROM users WHERE email = $1`;
   
     pool.query(findQuery, [email], async (error, result) => {
@@ -50,17 +50,19 @@ route.get("/login", (req, res) => {
         });
       } else {
         //compare inputan passwd dengan yang ada di database yang sdh di bycrypt
-        const match = await bcrypt.compare(password, result.rows[0].password);
-        if (match) {
+        const compare = await bcrypt.compare(password, result.rows[0].password);
+        const role = result.rows[0].role;
+        if (compare) {
           const tokenUser = jwt.sign(
             {
-              email: email,
-              password: password,
+              email: email,  
+              role: role
             },
-            "yourtokenishere"
+            "secretkey"
           );
           res.status(200).json({
             message: "Berhasil Masuk",
+            role: role,
             token: tokenUser,
           });
           console.log('Login Succes');
@@ -72,6 +74,8 @@ route.get("/login", (req, res) => {
       }
     });
   });
+
+
   
 
 module.exports = route;
