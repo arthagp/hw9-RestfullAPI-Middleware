@@ -157,6 +157,70 @@
           }
         }
       }
+    },
+    "/login": {
+      "summary": "login section ",
+      "post": {
+        "summary": "login with email and password",
+        "tags": [
+          "login"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful create a movies",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SuccesLogin"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register": {
+      "summary": "resgister section ",
+      "post": {
+        "summary": "login with email and password",
+        "tags": [
+          "register"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful create a movies",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SuccesRegister"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -197,6 +261,32 @@
           "message": {
             "type": "string",
             "example": "Succesfuly deleted"
+          }
+        }
+      },
+      "SuccesLogin": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Berhasil Masuk"
+          },
+          "role": {
+            "type": "string",
+            "example": "admin"
+          },
+          "token": {
+            "type": "string",
+            "example": "$1ad21324e141qwawdqwdq34"
+          }
+        }
+      },
+      "SuccesRegister": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Succes"
           }
         }
       }
